@@ -5,8 +5,12 @@ import com.guilder.hospital.models.Specialty;
 import com.guilder.hospital.repositories.DoctorRepository;
 import com.guilder.hospital.repositories.SpecialtyRepository;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 
+@Component
+@Profile("default")
 public class TestDvBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
 
@@ -23,18 +27,22 @@ public class TestDvBootstrap implements ApplicationListener<ContextRefreshedEven
         initData();
     }
 
+
     private void initData(){
         Specialty specialty = new Specialty();
 
         specialty.setName("Cardiologia");
         specialty.setDescription("Especialidad que se ocupa de problemas cardiacos");
+        specialtyRepository.save(specialty);
+
+
         Doctor doctor = new Doctor();
         doctor.setFistName("Nick");
         doctor.setLastName("Riviera");
         doctor.setSpecialty(specialty);
         doctor.setEnrollment("123456");
 
-        specialtyRepository.save(specialty);
+
         doctorRepository.save(doctor);
     }
 }
