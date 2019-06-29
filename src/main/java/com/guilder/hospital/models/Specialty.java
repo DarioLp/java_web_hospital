@@ -1,6 +1,7 @@
 package com.guilder.hospital.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,8 @@ public class Specialty {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "specialty")
+    @OneToMany(mappedBy = "specialty",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Doctor> doctors;
 
     public Specialty() {
