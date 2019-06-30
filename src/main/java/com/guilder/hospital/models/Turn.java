@@ -1,6 +1,8 @@
 package com.guilder.hospital.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,16 +11,28 @@ public class Turn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private Date date;
+
+    @NotNull
+    private Time hour;
+
+    @NotNull
     private boolean attended;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name="user_id")
     private User user;
+
+    @OneToOne(mappedBy = "turn" , fetch = FetchType.EAGER)
+    private Diagnostic diagnostic;
 
     public Turn() {
     }
@@ -61,6 +75,14 @@ public class Turn {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Time getHour() {
+        return hour;
+    }
+
+    public void setHour(Time hour) {
+        this.hour = hour;
     }
 
     @Override

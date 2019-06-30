@@ -1,6 +1,8 @@
 package com.guilder.hospital.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,20 +12,47 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String fistName;
+
+    @NotNull
     private String lastName;
+
     private String address;
+
     private String cuil;
+
+    @NotNull
+    @Column(unique = true)
     private String dni;
+
+    @NotNull
+    private String password;
 
     @OneToMany(mappedBy = "user")
     private List<Turn> turns;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name="role_id")
     private Role role;
 
+    @OneToOne(mappedBy = "user" , fetch = FetchType.EAGER)
+    private Doctor doctor;
+
+    private boolean isBloqued;
+
+    private Date dateBloqued;
+
     public User() {
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getId() {
@@ -90,6 +119,29 @@ public class User {
         this.role = role;
     }
 
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public boolean isBloqued() {
+        return isBloqued;
+    }
+
+    public void setBloqued(boolean bloqued) {
+        isBloqued = bloqued;
+    }
+
+    public Date getDateBloqued() {
+        return dateBloqued;
+    }
+
+    public void setDateBloqued(Date dateBloqued) {
+        this.dateBloqued = dateBloqued;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,5 +153,23 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", fistName='" + fistName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", address='" + address + '\'' +
+                ", cuil='" + cuil + '\'' +
+                ", dni='" + dni + '\'' +
+                ", password='" + password + '\'' +
+                ", turns=" + turns +
+                ", role=" + role +
+                ", doctor=" + doctor +
+                ", isBloqued=" + isBloqued +
+                ", dateBloqued=" + dateBloqued +
+                '}';
     }
 }

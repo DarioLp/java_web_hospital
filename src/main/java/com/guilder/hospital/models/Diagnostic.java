@@ -1,6 +1,7 @@
 package com.guilder.hospital.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +13,9 @@ public class Diagnostic {
 
     @OneToOne
     @JoinColumn(name = "turn_id")
+    @NotNull
     private Turn turn;
+
 
     public Diagnostic() {
     }

@@ -1,10 +1,10 @@
 package com.guilder.hospital.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,13 +13,26 @@ public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private String fistName;
+
+    @NotNull
     private String lastName;
+
+    @NotNull
     private String enrollment;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="specialty_id")
     @JsonIgnore
+    @NotNull
     private Specialty specialty;
 
     @OneToMany(mappedBy = "doctor")
@@ -29,6 +42,14 @@ public class Doctor {
     private List<Schedule> schedules;
 
     public Doctor() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Long getId() {
@@ -98,5 +119,19 @@ public class Doctor {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "id=" + id +
+                ", fistName='" + fistName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", enrollment='" + enrollment + '\'' +
+                ", user=" + user +
+                ", specialty=" + specialty +
+                ", turns=" + turns +
+                ", schedules=" + schedules +
+                '}';
     }
 }
