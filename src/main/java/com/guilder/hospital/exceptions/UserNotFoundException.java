@@ -1,4 +1,4 @@
-package com.guilder.hospital.Exceptions;
+package com.guilder.hospital.exceptions;
 
 public class UserNotFoundException extends RuntimeException{
 

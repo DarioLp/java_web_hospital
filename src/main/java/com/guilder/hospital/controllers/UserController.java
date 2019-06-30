@@ -1,6 +1,6 @@
 package com.guilder.hospital.controllers;
 
-import com.guilder.hospital.Exceptions.UserNotFoundException;
+import com.guilder.hospital.exceptions.UserNotFoundException;
 import com.guilder.hospital.models.User;
 import com.guilder.hospital.repositories.UserRepository;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,7 @@ public class UserController {
                     user.setCuil(user.getCuil());
                     user.setDni(user.getDni());
                     user.setRole(user.getRole());
-                    user.setTurns(user.getTurns());
+                    //user.setTurns(user.getTurns());
                     return userRepository.save(user);
                 })
                 .orElseGet(() -> {

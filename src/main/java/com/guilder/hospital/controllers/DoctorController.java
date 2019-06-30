@@ -1,6 +1,6 @@
 package com.guilder.hospital.controllers;
 
-import com.guilder.hospital.Exceptions.DoctorNotFoundException;
+import com.guilder.hospital.exceptions.DoctorNotFoundException;
 import com.guilder.hospital.controllers.assemblers.DoctorResourceAssembler;
 import com.guilder.hospital.models.Doctor;
 import com.guilder.hospital.repositories.DoctorRepository;
@@ -10,13 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
@@ -41,7 +35,15 @@ public class DoctorController {
                 .collect(Collectors.toList());
         return new Resources<>(doctors,
                 linkTo(methodOn(DoctorController.class).all()).withSelfRel());
+    }
 
+    @GetMapping ("/api/v1/doctorsBySpecialty")
+    public Resources<Resource<Doctor>> doctorsBySpecialty(@RequestParam(required = true)Long id){
+        List<Resource<Doctor>> doctors = doctorRepository.findDoctorsBySpecialty(id).stream()
+                .map(assembler::toResource)
+                .collect(Collectors.toList());
+        return new Resources<>(doctors,
+                linkTo(methodOn(DoctorController.class).all()).withSelfRel());
     }
 
     @PostMapping("/api/v1/doctors")
@@ -67,8 +69,8 @@ public class DoctorController {
                     doctor.setLastName(d.getLastName());
                     doctor.setEnrollment(d.getEnrollment());
                     doctor.setSpecialty(d.getSpecialty());
-                    doctor.setSchedules(d.getSchedules());
-                    doctor.setTurns(d.getTurns());
+                    //doctor.setSchedules(d.getSchedules());
+                    //doctor.setTurns(d.getTurns());
                     return doctorRepository.save(doctor);
                 })
                 .orElseGet(() -> {

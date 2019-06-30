@@ -1,6 +1,6 @@
 package com.guilder.hospital.controllers;
 
-import com.guilder.hospital.Exceptions.TurnNotFoundException;
+import com.guilder.hospital.exceptions.TurnNotFoundException;
 import com.guilder.hospital.models.Turn;
 import com.guilder.hospital.repositories.TurnRepository;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,12 @@ public class TurnController {
 
 
     @GetMapping ("/api/v1/turns")
-    List <Turn> list(){
+    List <Turn> all(){
+        return turnRepository.findAll();
+    }
+
+    @GetMapping ("/api/v1/turns_available")
+    List <Turn> availableTurns(){
         return turnRepository.findAll();
     }
 

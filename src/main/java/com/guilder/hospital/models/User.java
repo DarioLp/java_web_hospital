@@ -16,9 +16,10 @@ public class User {
     private String cuil;
     private String dni;
 
+    /*
     @OneToMany(mappedBy = "user")
     private List<Turn> turns;
-
+    */
     @ManyToOne
     @JoinColumn(name="role_id")
     private Role role;
@@ -73,7 +74,7 @@ public class User {
     public void setDni(String dni) {
         this.dni = dni;
     }
-
+/*
     public List<Turn> getTurns() {
         return turns;
     }
@@ -81,7 +82,7 @@ public class User {
     public void setTurns(List<Turn> turns) {
         this.turns = turns;
     }
-
+*/
     public Role getRole() {
         return role;
     }

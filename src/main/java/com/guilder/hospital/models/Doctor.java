@@ -1,5 +1,6 @@
 package com.guilder.hospital.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,15 +20,15 @@ public class Doctor {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="specialty_id")
-    @JsonIgnore
     private Specialty specialty;
 
+    /*
     @OneToMany(mappedBy = "doctor")
     private List<Turn> turns;
 
     @OneToMany(mappedBy = "doctor")
     private List<Schedule> schedules;
-
+    */
     public Doctor() {
     }
 
@@ -71,6 +72,7 @@ public class Doctor {
         this.specialty = specialty;
     }
 
+    /*
     public List<Turn> getTurns() {
         return turns;
     }
@@ -86,6 +88,7 @@ public class Doctor {
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
     }
+     */
 
     @Override
     public boolean equals(Object o) {

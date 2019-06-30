@@ -2,6 +2,7 @@ package com.guilder.hospital.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,10 +21,10 @@ public class Specialty {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "specialty",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
+    /*@OneToMany(mappedBy = "specialty",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Doctor> doctors;
-
+    */
     public Specialty() {
     }
 
@@ -51,13 +52,14 @@ public class Specialty {
         this.description = description;
     }
 
-    public List<Doctor> getDoctors() {
+    /*public List<Doctor> getDoctors() {
         return doctors;
     }
 
     public void setDoctors(List<Doctor> doctors) {
         this.doctors = doctors;
     }
+    */
 
     @Override
     public boolean equals(Object o) {
