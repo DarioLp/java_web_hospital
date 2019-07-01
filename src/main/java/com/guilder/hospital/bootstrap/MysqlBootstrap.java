@@ -71,6 +71,7 @@ public class MysqlBootstrap implements ApplicationListener<ContextRefreshedEvent
             System.out.println("LOOOOOG: " + specialty.toString());
             System.out.println("LOOOOOG: " + doctor.toString());
             System.out.println("LOOOOOG: " + user.toString());
+            System.out.println("LOG2: " + role.getUsers());
             doctorRepository.save(doctor);
         }
 

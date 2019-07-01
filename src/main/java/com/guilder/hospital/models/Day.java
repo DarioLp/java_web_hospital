@@ -17,7 +17,7 @@ public class Day {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "day",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "day")
     @JsonIgnore
     private List<Schedule> schedules;
 

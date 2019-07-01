@@ -31,10 +31,18 @@ public class Turn {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToOne(mappedBy = "turn" , fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "turn")
     private Diagnostic diagnostic;
 
     public Turn() {
+    }
+
+    public Diagnostic getDiagnostic() {
+        return diagnostic;
+    }
+
+    public void setDiagnostic(Diagnostic diagnostic) {
+        this.diagnostic = diagnostic;
     }
 
     public Long getId() {

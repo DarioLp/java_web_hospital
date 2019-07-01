@@ -14,7 +14,7 @@ public class Schedule {
     private Long id;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="day_id")
     @JsonIgnore
     @NotNull

@@ -24,7 +24,7 @@ public class Specialty {
 
     private String description;
 
-    @OneToMany(mappedBy = "specialty",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "specialty")
     @JsonIgnore
     private List<Doctor> doctors;
 

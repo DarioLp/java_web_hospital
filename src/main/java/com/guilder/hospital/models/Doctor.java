@@ -24,12 +24,13 @@ public class Doctor {
     private String enrollment;
 
     @OneToOne
+    @NotNull
     @JoinColumn(name = "user_id")
     private User user;
 
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name="specialty_id")
     @JsonIgnore
     @NotNull
