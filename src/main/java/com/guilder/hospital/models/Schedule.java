@@ -1,7 +1,10 @@
 package com.guilder.hospital.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Objects;
 
 @Entity
@@ -9,11 +12,22 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String day;
-    private Date hour_since;
-    private Date hour_to;
+
+
+    @ManyToOne()
+    @JoinColumn(name="day_id")
+    @JsonIgnore
+    @NotNull
+    private Day day;
+
+    @NotNull
+    private Time hour_since;
+
+    @NotNull
+    private Time hour_to;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
 
@@ -28,27 +42,20 @@ public class Schedule {
         this.id = id;
     }
 
-    public String getDay() {
-        return day;
-    }
 
-    public void setDay(String day) {
-        this.day = day;
-    }
-
-    public Date getHour_since() {
+    public Time getHour_since() {
         return hour_since;
     }
 
-    public void setHour_since(Date hour_since) {
+    public void setHour_since(Time hour_since) {
         this.hour_since = hour_since;
     }
 
-    public Date getHour_to() {
+    public Time getHour_to() {
         return hour_to;
     }
 
-    public void setHour_to(Date hour_to) {
+    public void setHour_to(Time hour_to) {
         this.hour_to = hour_to;
     }
 

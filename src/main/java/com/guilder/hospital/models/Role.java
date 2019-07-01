@@ -1,6 +1,7 @@
 package com.guilder.hospital.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,6 +10,8 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private String role;
 
     /*@OneToMany(mappedBy = "role")
@@ -52,5 +55,15 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", role='" + role + '\'' +
+                ", users=" + users +
+                '}';
     }
 }
