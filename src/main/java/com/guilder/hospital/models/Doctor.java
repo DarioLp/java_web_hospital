@@ -38,11 +38,11 @@ public class Doctor {
     private Specialty specialty;
 
     
-    @OneToMany(mappedBy = "doctor")
+    /* @OneToMany(mappedBy = "doctor")
     private List<Turn> turns;
 
     @OneToMany(mappedBy = "doctor")
-    private List<Schedule> schedules;
+    private List<Schedule> schedules; */
    
     public Doctor() {
     }
@@ -96,7 +96,7 @@ public class Doctor {
     }
 
     
-    public List<Turn> getTurns() {
+    /* public List<Turn> getTurns() {
         return turns;
     }
 
@@ -110,7 +110,7 @@ public class Doctor {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
-    }
+    } */
     
 
     @Override
@@ -135,8 +135,8 @@ public class Doctor {
                 ", enrollment='" + enrollment + '\'' +
                 ", user=" + user +
                 ", specialty=" + specialty +
-                ", turns=" + turns +
-                ", schedules=" + schedules +
+                /* ", turns=" + turns +
+                ", schedules=" + schedules + */
                 '}';
     }
 }

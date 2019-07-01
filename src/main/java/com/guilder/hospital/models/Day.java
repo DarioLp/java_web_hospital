@@ -17,20 +17,20 @@ public class Day {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "day")
+    /* @OneToMany(mappedBy = "day")
     @JsonIgnore
-    private List<Schedule> schedules;
+    private List<Schedule> schedules; */
 
     public Day() {
     }
 
-    public List<Schedule> getSchedules() {
+    /* public List<Schedule> getSchedules() {
         return schedules;
     }
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
-    }
+    } */
 
     public Long getId() {
         return id;

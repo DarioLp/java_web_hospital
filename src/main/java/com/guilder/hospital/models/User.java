@@ -29,8 +29,8 @@ public class User {
     @NotNull
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Turn> turns;
+    /* @OneToMany(mappedBy = "user")
+    private List<Turn> turns; */
     
     @ManyToOne
     @NotNull
@@ -103,13 +103,13 @@ public class User {
         this.dni = dni;
     }
 
-    public List<Turn> getTurns() {
+    /* public List<Turn> getTurns() {
         return turns;
     }
 
     public void setTurns(List<Turn> turns) {
         this.turns = turns;
-    }
+    } */
 
     public Role getRole() {
         return role;
@@ -165,7 +165,7 @@ public class User {
                 ", cuil='" + cuil + '\'' +
                 ", dni='" + dni + '\'' +
                 ", password='" + password + '\'' +
-                ", turns=" + turns +
+                /* ", turns=" + turns + */
                 ", role=" + role +
                 ", doctor=" + doctor +
                 ", isBloqued=" + isBloqued +
