@@ -1,5 +1,7 @@
 package com.guilder.hospital.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
@@ -38,6 +40,7 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Doctor doctor;
 
     private boolean isBloqued;

@@ -38,7 +38,7 @@ public class MysqlBootstrap implements ApplicationListener<ContextRefreshedEvent
 
     private void loadData(){
 
-
+/*
         if (specialtyRepository.count() == 0L && doctorRepository.count() == 0L && userRepository.count() == 0L && roleRepository.count() == 0L){
             Specialty specialty = new Specialty();
             specialty.setName("Cardiologia");
@@ -71,11 +71,10 @@ public class MysqlBootstrap implements ApplicationListener<ContextRefreshedEvent
             System.out.println("LOOOOOG: " + specialty.toString());
             System.out.println("LOOOOOG: " + doctor.toString());
             System.out.println("LOOOOOG: " + user.toString());
-            System.out.println("LOG2: " + role.getUsers());
             doctorRepository.save(doctor);
         }
 
-
+*/
     }
 
 
