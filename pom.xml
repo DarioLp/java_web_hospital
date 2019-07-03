@@ -87,7 +87,7 @@
 		</dependency>
 	</dependencies>
 
-	<!--<build>
+	<build>
         <plugins>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
@@ -119,5 +119,5 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 </project>
