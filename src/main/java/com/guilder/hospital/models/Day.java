@@ -1,6 +1,7 @@
 package com.guilder.hospital.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,20 +18,20 @@ public class Day {
     @NotNull
     private String name;
 
-    /* @OneToMany(mappedBy = "day")
-    @JsonIgnore
-    private List<Schedule> schedules; */
+    @OneToMany(mappedBy = "day")
+    @JsonIgnoreProperties(value ={"day", "hour_since","hour_to", "doctor"})
+    private List<Schedule> schedules;
 
     public Day() {
     }
 
-    /* public List<Schedule> getSchedules() {
+    public List<Schedule> getSchedules() {
         return schedules;
     }
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
-    } */
+    }
 
     public Long getId() {
         return id;

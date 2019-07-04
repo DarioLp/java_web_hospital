@@ -1,5 +1,9 @@
 package com.guilder.hospital.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -14,6 +18,7 @@ public class Diagnostic {
     @OneToOne
     @JoinColumn(name = "turn_id")
     @NotNull
+    @JsonIgnoreProperties(value ={"date", "hour","attended", "doctor", "user","diagnostic"})
     private Turn turn;
 
 

@@ -1,6 +1,7 @@
 package com.guilder.hospital.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,6 +30,7 @@ public class Schedule {
     @ManyToOne
     @NotNull
     @JoinColumn(name="doctor_id")
+    @JsonIgnoreProperties(value ={"fistName", "lastName","enrollment", "user", "specialty"})
     private Doctor doctor;
 
     public Schedule() {

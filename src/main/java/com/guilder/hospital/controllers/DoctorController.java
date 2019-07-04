@@ -43,7 +43,7 @@ public class DoctorController {
                 .map(assembler::toResource)
                 .collect(Collectors.toList());
         return new Resources<>(doctors,
-                linkTo(methodOn(DoctorController.class).all()).withSelfRel());
+                linkTo(methodOn(DoctorController.class).doctorsBySpecialty(id)).withSelfRel());
     }
 
     @PostMapping("/api/v1/doctors")

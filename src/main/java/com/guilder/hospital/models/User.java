@@ -1,6 +1,7 @@
 package com.guilder.hospital.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,18 +30,21 @@ public class User {
     private String dni;
 
     @NotNull
+    @JsonIgnore
     private String password;
 
-    /* @OneToMany(mappedBy = "user")
-    private List<Turn> turns; */
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties(value ={"date", "hour","attended", "doctor", "user","diagnostic"})
+    private List<Turn> turns;
     
     @ManyToOne
     @NotNull
     @JoinColumn(name="role_id")
+    @JsonIgnoreProperties(value ={"role", "users"})
     private Role role;
 
     @OneToOne(mappedBy = "user")
-    @JsonIgnore
+    @JsonIgnoreProperties(value ={"fistName", "lastName","enrollment", "user", "specialty"})
     private Doctor doctor;
 
     private boolean isBloqued;
@@ -106,14 +110,13 @@ public class User {
         this.dni = dni;
     }
 
-    /* public List<Turn> getTurns() {
+    public List<Turn> getTurns() {
         return turns;
     }
 
     public void setTurns(List<Turn> turns) {
         this.turns = turns;
-    } */
-
+    }
     public Role getRole() {
         return role;
     }
@@ -134,8 +137,8 @@ public class User {
         return isBloqued;
     }
 
-    public void setBloqued(boolean bloqued) {
-        isBloqued = bloqued;
+    public void setBloqued(boolean isBloqued) {
+        this.isBloqued = isBloqued;
     }
 
     public Date getDateBloqued() {

@@ -2,6 +2,7 @@ package com.guilder.hospital.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 import javax.persistence.*;
@@ -27,22 +28,24 @@ public class Doctor {
     @OneToOne
     @NotNull
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(value ={"fistName", "lastName","address", "cuil", "dni","role", "doctor", "isBloqued", "dateBloqued", "turns"})
     private User user;
-
 
 
     @ManyToOne()
     @JoinColumn(name="specialty_id")
-    @JsonIgnore
+    @JsonIgnoreProperties(value ={"name", "description","doctors"})
     @NotNull
     private Specialty specialty;
 
     
-    /* @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor")
+    @JsonIgnoreProperties(value ={"date", "hour","attended", "doctor", "user","diagnostic"})
     private List<Turn> turns;
 
     @OneToMany(mappedBy = "doctor")
-    private List<Schedule> schedules; */
+    @JsonIgnoreProperties(value ={"day", "hour_since","hour_to", "doctor"})
+    private List<Schedule> schedules;
    
     public Doctor() {
     }

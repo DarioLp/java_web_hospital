@@ -25,9 +25,9 @@ public class Specialty {
 
     private String description;
 
-    /* @OneToMany(mappedBy = "specialty")
+    @OneToMany(mappedBy = "specialty")
     @JsonIgnore
-    private List<Doctor> doctors; */
+    private List<Doctor> doctors;
     
     public Specialty() {
     }
@@ -56,13 +56,13 @@ public class Specialty {
         this.description = description;
     }
 
-    /* public List<Doctor> getDoctors() {
+    public List<Doctor> getDoctors() {
         return doctors;
     }
 
     public void setDoctors(List<Doctor> doctors) {
         this.doctors = doctors;
-    } */
+    }
    
 
     @Override

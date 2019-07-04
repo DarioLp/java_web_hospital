@@ -1,5 +1,8 @@
 package com.guilder.hospital.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -14,9 +17,10 @@ public class Role {
     @NotNull
     private String role;
 
-    /*@OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role")
+    @JsonIgnoreProperties(value ={"fistName", "lastName","address", "cuil", "dni","role", "doctor", "isBloqued", "dateBloqued", "turns"})
     private List<User> users;
-*/
+
     public Role() {
     }
 
@@ -35,7 +39,7 @@ public class Role {
     public void setRole(String role) {
         this.role = role;
     }
-/*
+
     public List<User> getUsers() {
         return users;
     }
@@ -43,7 +47,7 @@ public class Role {
     public void setUsers(List<User> users) {
         this.users = users;
     }
-*/
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

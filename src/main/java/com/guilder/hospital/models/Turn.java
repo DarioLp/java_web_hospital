@@ -1,5 +1,7 @@
 package com.guilder.hospital.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Time;
@@ -24,14 +26,17 @@ public class Turn {
     @ManyToOne
     @NotNull
     @JoinColumn(name="doctor_id")
+    @JsonIgnoreProperties(value ={"fistName", "lastName","enrollment", "user", "specialty"})
     private Doctor doctor;
 
     @ManyToOne
     @NotNull
     @JoinColumn(name="user_id")
+    @JsonIgnoreProperties(value ={"fistName", "lastName","address", "cuil", "dni","role", "doctor", "isBloqued", "dateBloqued", "turns", "bloqued"})
     private User user;
 
-    @OneToOne(mappedBy = "turn")
+    @OneToOne(mappedBy = "turn", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value ={"description", "turn"})
     private Diagnostic diagnostic;
 
     public Turn() {

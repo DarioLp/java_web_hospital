@@ -20,7 +20,9 @@ public class TurnController {
 
     @GetMapping ("/api/v1/turns")
     List <Turn> all(){
-        return turnRepository.findAll();
+        List<Turn> turns = turnRepository.findAll();
+        System.out.println(turns);
+        return turns;
     }
 
     @GetMapping ("/api/v1/turns_available")
