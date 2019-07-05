@@ -1,16 +1,25 @@
 package com.guilder.hospital.controllers;
 
 import com.guilder.hospital.exceptions.TurnNotFoundException;
+import com.guilder.hospital.models.Doctor;
+import com.guilder.hospital.models.Schedule;
 import com.guilder.hospital.models.Turn;
 import com.guilder.hospital.repositories.TurnRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 
 @RestController
 public class TurnController {
 
+    private final int duracion = 15;
     private final TurnRepository turnRepository;
 
     public TurnController(TurnRepository turnRepository){
@@ -25,9 +34,145 @@ public class TurnController {
         return turns;
     }
 
-    @GetMapping ("/api/v1/turns_available")
-    List <Turn> availableTurns(){
-        return turnRepository.findAll();
+    /*
+    @GetMapping ("/api/v1/turns_available_specialty")
+    List <Turn> availableTurnsBySpecialty(@RequestParam long idSpecialty , @RequestParam Date date){
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String stDate = simpleDateFormat.format(date);
+
+        List <Turn> ocupados = turnRepository.findTurnsReserved(idSpecialty, stDate);
+        if (ocupados == null) return null;
+        if (ocupados.isEmpty()) return null;
+        List <Turn> disponibles = new ArrayList<Turn>();
+        List <List<Turn>> turnsByDoctor = new ArrayList<>();
+
+        ocupados.sort(Comparator.comparing(a -> a.getDoctor().getId()));
+        Doctor aux= disponibles.get(0).getDoctor();
+        List <Turn> auxList = new ArrayList<Turn>();
+        for (Turn t :ocupados){
+            if (t.getDoctor() != aux){
+                turnsByDoctor.add(auxList);
+                auxList = new ArrayList<Turn>();
+            }
+            auxList.add(t);
+        }
+
+        List<Schedule> shedules= (ocupados.get(0)).getDoctor().getSchedules();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        if (dayOfWeek == 1) dayOfWeek =8; //Si es domingo
+        dayOfWeek --;
+
+        Schedule s = new Schedule();
+        for ( Schedule aux : shedules){
+            if(aux.getDay().getId()== dayOfWeek){
+                s = aux;
+                break;
+            }
+        }
+
+        if (s.getHour_since() ==null) return null; // si no se encontro un shedule para ese dia
+        Date time = this.addGMT(s.getHour_since());
+        int i =0;
+        for ( List<Turn> docs : turnsByDoctor){
+
+            for ( Turn t  : docs){
+                while ( time.compareTo(t.getHour()) < 0){
+                    Turn newTurn = new Turn();
+                    newTurn.setDoctor(s.getDoctor());
+                    newTurn.setDate(date);
+                    newTurn.setAttended(false);
+                    newTurn.setHour(new Time(time.getTime()));
+                    disponibles.add(newTurn);
+
+                    time = this.addMinutes(time, this.duracion);
+                }
+                time = this.addMinutes(time, this.duracion);
+                i++;
+            }
+
+            Date timeFin =addGMT(s.getHour_to());
+            while (time.compareTo(timeFin)<0){
+                Turn newTurn = new Turn();
+                newTurn.setDoctor(s.getDoctor());
+                newTurn.setDate(date);
+                newTurn.setAttended(false);
+                newTurn.setHour(new Time(time.getTime()));
+                disponibles.add(newTurn);
+
+                time =this.addMinutes(time, this.duracion);
+            }
+
+        }
+
+
+
+        return disponibles;
+
+    }
+*/
+    @GetMapping ("/api/v1/turns_available_by_doctor")
+    List <Turn> availableTurnsByDoctor(@RequestParam Long idDoctor, @RequestParam String dia) throws ParseException {
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date date = format.parse(dia);
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String stDate = simpleDateFormat.format(date);
+
+        List <Turn> ocupados = turnRepository.findTurnsReservedWithDoctor(idDoctor, stDate);
+        if (ocupados == null) return null;
+        if (ocupados.isEmpty()) return null;
+        List <Turn> disponibles = new ArrayList<Turn>();
+        List<Schedule> shedules= (ocupados.get(0)).getDoctor().getSchedules();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        if (dayOfWeek == 1) dayOfWeek =8; //Si es domingo
+        dayOfWeek --;
+
+        Schedule s = new Schedule();
+        for ( Schedule aux : shedules){
+            if(aux.getDay().getId()== dayOfWeek){
+                s = aux;
+                break;
+            }
+        }
+
+        if (s.getHour_since() ==null) return null; // si no se encontro un shedule para ese dia
+        Date time = this.addGMT(s.getHour_since());
+        for ( Turn t : ocupados){
+            while ( time.compareTo(t.getHour()) < 0){
+                Turn newTurn = new Turn();
+                newTurn.setDoctor(s.getDoctor());
+                newTurn.setDate(date);
+                newTurn.setAttended(false);
+                newTurn.setHour(new Time(time.getTime()));
+                disponibles.add(newTurn);
+
+                time = this.addMinutes(time, this.duracion);
+            }
+            time = this.addMinutes(time, this.duracion);
+        }
+
+        Date timeFin =addGMT(s.getHour_to());
+        while (time.compareTo(timeFin)<0){
+            Turn newTurn = new Turn();
+            newTurn.setDoctor(s.getDoctor());
+            newTurn.setDate(date);
+            newTurn.setAttended(false);
+            newTurn.setHour(new Time(time.getTime()));
+            disponibles.add(newTurn);
+
+            time =this.addMinutes(time, this.duracion);
+        }
+
+        return disponibles;
+
     }
 
     @PostMapping("/api/v1/turns")
@@ -49,9 +194,9 @@ public class TurnController {
         return turnRepository.findById(id)
                 .map(turn -> {
                     turn.setAttended(newTurn.isAttended());
-                    turn.setDate(newTurn.getDate());
-                    turn.setDoctor(newTurn.getDoctor());
-                    turn.setUser(newTurn.getUser());
+                    if (newTurn.getDate() != null) turn.setDate(newTurn.getDate());
+                    if (newTurn.getDoctor() !=null) turn.setDoctor(newTurn.getDoctor());
+                    if (newTurn.getUser() != null) turn.setUser(newTurn.getUser());
                     return turnRepository.save(turn);
                 })
                 .orElseGet(() -> {
@@ -63,6 +208,23 @@ public class TurnController {
     @DeleteMapping("/api/v1/turns/{id}")
     void deleteTurn(@PathVariable Long id) {
         turnRepository.deleteById(id);
+    }
+
+
+    private Date addMinutes(Date hour, int minutos){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(hour);
+        calendar.add(Calendar.MINUTE, this.duracion); //minutosASumar es int.
+        hour = calendar.getTime();
+        return hour;
+    }
+
+    private Date addGMT(Date hour){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(hour);
+        calendar.add(Calendar.HOUR, 3);
+        hour = calendar.getTime();
+        return hour;
     }
 
 }

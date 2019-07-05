@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://remotemysql.com:3306/fOgYmg0qgj
     username: fOgYmg0qgj
     password: Ra6q7jZAlg
+    #url: jdbc:mysql://remotemysql.com:3306/lk9J0gpKAF
+    #username: lk9J0gpKAF
+    #password: 97Lwdswzic
   jpa:
     hibernate:
       ddl-auto: validate

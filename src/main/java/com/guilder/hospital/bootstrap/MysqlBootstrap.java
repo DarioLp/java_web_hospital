@@ -48,43 +48,6 @@ public class MysqlBootstrap implements ApplicationListener<ContextRefreshedEvent
             roleRepository.save(admin);
         }
 
-/*
-        if (specialtyRepository.count() == 0L && doctorRepository.count() == 0L && userRepository.count() == 0L && roleRepository.count() == 0L){
-            Specialty specialty = new Specialty();
-            specialty.setName("Cardiologia");
-            specialty.setDescription("Especialidad que se ocupa de problemas cardiacos");
-            specialtyRepository.save(specialty);
-
-
-            Role role = new Role();
-            role.setRole("DOCTOR");
-            roleRepository.save(role);
-
-
-
-            User user = new User();
-            user.setFistName("Nick");
-            user.setLastName("Riviera");
-            user.setDni("12345678");
-            user.setPassword("1234");
-            user.setRole(role);
-            userRepository.save(user);
-
-            Doctor doctor = new Doctor();
-            doctor.setFistName("Nick");
-            doctor.setLastName("Riviera");
-            doctor.setSpecialty(specialty);
-            doctor.setEnrollment("123456");
-            doctor.setUser(user);
-
-            System.out.println("LOOOOOG: " + role.toString());
-            System.out.println("LOOOOOG: " + specialty.toString());
-            System.out.println("LOOOOOG: " + doctor.toString());
-            System.out.println("LOOOOOG: " + user.toString());
-            doctorRepository.save(doctor);
-        }
-
-*/
     }
 
 

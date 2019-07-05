@@ -26,7 +26,7 @@ public class Turn {
     @ManyToOne
     @NotNull
     @JoinColumn(name="doctor_id")
-    @JsonIgnoreProperties(value ={"fistName", "lastName","enrollment", "user", "specialty"})
+    @JsonIgnoreProperties(value ={"fistName", "lastName","enrollment", "user", "specialty", "turns", "schedules"})
     private Doctor doctor;
 
     @ManyToOne

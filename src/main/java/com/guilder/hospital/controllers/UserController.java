@@ -59,12 +59,13 @@ public class UserController {
 
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setFistName(user.getFistName());
-                    user.setLastName(user.getLastName());
-                    user.setAddress(user.getAddress());
-                    user.setCuil(user.getCuil());
-                    user.setUsername(user.getUsername());
-                    user.setRole(user.getRole());
+                    if (user.getFistName() != null) user.setFistName(user.getFistName());
+                    if (user.getLastName() != null) user.setLastName(user.getLastName());
+                    if (user.getAddress() != null) user.setAddress(user.getAddress());
+                    if (user.getCuil() != null) user.setCuil(user.getCuil());
+                    if (user.getUsername() != null) user.setUsername(user.getUsername());
+                    if (user.getRole() != null) user.setRole(user.getRole());
+                    if (user.getTurns() != null) user.setTurns(user.getTurns());
                     return userRepository.save(user);
                 })
                 .orElseGet(() -> {
