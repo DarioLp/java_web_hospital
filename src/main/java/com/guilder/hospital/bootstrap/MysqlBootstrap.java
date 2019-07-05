@@ -37,6 +37,16 @@ public class MysqlBootstrap implements ApplicationListener<ContextRefreshedEvent
     }
 
     private void loadData(){
+        if(roleRepository.count() == 0L){
+            Role user = new Role();
+            user.setRole("ROLE_USER");
+
+            Role admin = new Role();
+            admin.setRole("ROLE_ADMIN");
+
+            roleRepository.save(user);
+            roleRepository.save(admin);
+        }
 
 /*
         if (specialtyRepository.count() == 0L && doctorRepository.count() == 0L && userRepository.count() == 0L && roleRepository.count() == 0L){

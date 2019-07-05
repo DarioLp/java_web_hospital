@@ -1,22 +1,40 @@
 package com.guilder.hospital.controllers;
 
+import com.guilder.hospital.exceptions.InvalidCredentialsException;
+import com.guilder.hospital.exceptions.RegistedUserException;
 import com.guilder.hospital.exceptions.UserNotFoundException;
+import com.guilder.hospital.models.Role;
 import com.guilder.hospital.models.User;
+import com.guilder.hospital.repositories.RoleRepository;
 import com.guilder.hospital.repositories.UserRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
 public class UserController {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserController(UserRepository userRepository){
+    public UserController(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
-
 
     @GetMapping ("/api/v1/users")
     List <User> list(){
@@ -45,9 +63,8 @@ public class UserController {
                     user.setLastName(user.getLastName());
                     user.setAddress(user.getAddress());
                     user.setCuil(user.getCuil());
-                    user.setDni(user.getDni());
+                    user.setUsername(user.getUsername());
                     user.setRole(user.getRole());
-                    //user.setTurns(user.getTurns());
                     return userRepository.save(user);
                 })
                 .orElseGet(() -> {
@@ -61,4 +78,73 @@ public class UserController {
         userRepository.deleteById(id);
     }
 
+
+
+    @PostMapping("api/v1/login")
+    public User login(@RequestParam("username") String username, @RequestParam("password") String pwd) {
+        try{
+            User user = userRepository.findByDni(username);
+            if(user == null){
+                throw new UserNotFoundException(username);
+            }
+            if(!passwordEncoder.matches(pwd, user.getPassword())){
+                throw new InvalidCredentialsException();
+            }
+            user.setToken(getJWTToken(user.getUsername()));
+            return user;
+        }catch(Exception exception){
+            throw  exception;
+        }
+
+    }
+
+    @PostMapping("api/v1/register")
+    public User register(@RequestParam("username") String username, @RequestParam("password") String pwd,
+    @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+        try {
+
+            if(userRepository.countByDni(username) != 0){
+                throw new RegistedUserException();
+            }
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(passwordEncoder.encode(pwd));
+            user.setFistName(firstName);
+            user.setLastName(lastName);
+            user.setBloqued(false);
+
+            Role role = roleRepository.getRole("USER");
+            user.setRole(role);
+            userRepository.save(user);
+            user.setToken(getJWTToken(user.getUsername()));
+            return user;
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+
+
+
+
+    private String getJWTToken(String dni) {
+        String secretKey = "guilder";
+        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+                .commaSeparatedStringToAuthorityList("ROLE_USER");
+
+        String token = Jwts
+                .builder()
+                .setId("GuildHospital")
+                .setSubject(dni)
+                .claim("authorities",
+                        grantedAuthorities.stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .collect(Collectors.toList()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .signWith(SignatureAlgorithm.HS512,
+                        secretKey.getBytes()).compact();
+
+        return "Bearer " + token;
+    }
 }

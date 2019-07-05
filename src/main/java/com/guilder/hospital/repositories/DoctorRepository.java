@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface DoctorRepository extends JpaRepository<Doctor,Long> {
 
-    @Query(value ="SELECT * FROM doctor d WHERE d.specialty_id = :spacialtyId",nativeQuery = true)
-    List<Doctor> findDoctorsBySpecialty(@Param("spacialtyId") Long specialtyId);
+    @Query(value ="SELECT * FROM doctor d WHERE d.specialty_id = :specialtyId",nativeQuery = true)
+    List<Doctor> findDoctorsBySpecialty(@Param("specialtyId") Long specialtyId);
 
 }

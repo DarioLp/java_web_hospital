@@ -25,9 +25,12 @@ public class User {
 
     private String cuil;
 
+    @Transient
+    private String token;
+
     @NotNull
-    @Column(unique = true)
-    private String dni;
+    @Column(name="dni",unique = true)
+    private String username;
 
     @NotNull
     @JsonIgnore
@@ -52,6 +55,15 @@ public class User {
     private Date dateBloqued;
 
     public User() {
+    }
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getPassword() {
@@ -102,12 +114,12 @@ public class User {
         this.cuil = cuil;
     }
 
-    public String getDni() {
-        return dni;
+    public String getUsername() {
+        return username;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<Turn> getTurns() {
@@ -169,7 +181,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +
                 ", cuil='" + cuil + '\'' +
-                ", dni='" + dni + '\'' +
+                ", dni='" + username + '\'' +
                 ", password='" + password + '\'' +
                 /* ", turns=" + turns + */
                 ", role=" + role +
