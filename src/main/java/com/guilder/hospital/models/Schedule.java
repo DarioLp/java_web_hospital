@@ -81,4 +81,12 @@ public class Schedule {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Day getDay() {
+        return day;
+    }
+
+    public void setDay(Day day) {
+        this.day = day;
+    }
 }

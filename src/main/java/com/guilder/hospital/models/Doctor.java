@@ -99,7 +99,7 @@ public class Doctor {
     }
 
     
-    /* public List<Turn> getTurns() {
+    public List<Turn> getTurns() {
         return turns;
     }
 
@@ -113,7 +113,7 @@ public class Doctor {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
-    } */
+    }
     
 
     @Override

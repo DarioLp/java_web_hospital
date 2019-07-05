@@ -65,12 +65,12 @@ public class DoctorController {
 
         return doctorRepository.findById(id)
                 .map(doctor -> {
-                    doctor.setFistName(d.getFistName());
-                    doctor.setLastName(d.getLastName());
-                    doctor.setEnrollment(d.getEnrollment());
-                    doctor.setSpecialty(d.getSpecialty());
-                    //doctor.setSchedules(d.getSchedules());
-                    //doctor.setTurns(d.getTurns());
+                    if( d.getFistName() != null )doctor.setFistName(d.getFistName());
+                    if( d.getLastName() != null) doctor.setLastName(d.getLastName());
+                    if( d.getEnrollment() !=null )doctor.setEnrollment(d.getEnrollment());
+                    if( d.getSpecialty() !=null)doctor.setSpecialty(d.getSpecialty());
+                    if( d.getSchedules() !=null)doctor.setSchedules(d.getSchedules());
+                    if( d.getTurns() != null)doctor.setTurns(d.getTurns());
                     return doctorRepository.save(doctor);
                 })
                 .orElseGet(() -> {

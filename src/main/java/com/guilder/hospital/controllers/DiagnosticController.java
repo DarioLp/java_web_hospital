@@ -41,8 +41,8 @@ public class DiagnosticController {
 
         return repository.findById(id)
                 .map(diagnostic -> {
-                    diagnostic.setDescription(newDiagnostic.getDescription());
-                    diagnostic.setTurn(newDiagnostic.getTurn());
+                    if (newDiagnostic.getDescription() != null)diagnostic.setDescription(newDiagnostic.getDescription());
+                    if (newDiagnostic.getTurn() != null) diagnostic.setTurn(newDiagnostic.getTurn());
                     return repository.save(diagnostic);
                 })
                 .orElseGet(() -> {
