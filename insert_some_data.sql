@@ -13,9 +13,9 @@ Insert INTO specialty (description, name) values ('Profesional que trata problem
 Insert INTO specialty (description, name) values ('Especialización en problemas cardiacos', 'Cardiologo');
 Insert INTO specialty (description, name) values ('Mejora el habla de las personas', 'Fonodiologo');
 
-Insert INTO role(role) values ("Admin");
-Insert INTO role(role) values ("Doctor");
-Insert INTO role(role) values ("Paciente");
+Insert INTO role(role) values ("ROLE_USER");
+Insert INTO role(role) values ("ROLE_ADMIN");
+Insert INTO role(role) values ("ROLE_DOCTOR");
 
 Insert INTO user(address, cuil, dni, fist_name, last_name, role_id, is_bloqued, password) values ("Av. Independencia 89","89898989","8898989","Horacio", "Lopez",2, 0, "hola");
 Insert INTO user(address, cuil, dni, fist_name, last_name, role_id, is_bloqued, password) values ("Av. Constitucion 01","09019090","090193191","Ana", "Martinez",2, 0, "hola");

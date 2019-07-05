@@ -29,20 +29,6 @@ public class TestDvBootstrap implements ApplicationListener<ContextRefreshedEven
 
 
     private void initData(){
-        Specialty specialty = new Specialty();
 
-        specialty.setName("Cardiologia");
-        specialty.setDescription("Especialidad que se ocupa de problemas cardiacos");
-        specialtyRepository.save(specialty);
-
-
-        Doctor doctor = new Doctor();
-        doctor.setFistName("Nick");
-        doctor.setLastName("Riviera");
-        doctor.setSpecialty(specialty);
-        doctor.setEnrollment("123456");
-
-
-        doctorRepository.save(doctor);
     }
 }

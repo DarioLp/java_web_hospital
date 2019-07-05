@@ -1,12 +1,17 @@
 package com.guilder.hospital.controllers;
 
 import com.guilder.hospital.exceptions.TurnNotFoundException;
+import com.guilder.hospital.exceptions.UserBloquedException;
 import com.guilder.hospital.models.Doctor;
 import com.guilder.hospital.models.Schedule;
 import com.guilder.hospital.models.Turn;
+import com.guilder.hospital.models.User;
 import com.guilder.hospital.repositories.DoctorRepository;
 import com.guilder.hospital.repositories.TurnRepository;
+import com.guilder.hospital.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
@@ -26,6 +31,9 @@ public class TurnController {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public TurnController(TurnRepository turnRepository){
         this.turnRepository = turnRepository;
@@ -192,7 +200,34 @@ public class TurnController {
 
     @PostMapping("/api/v1/turns")
     Turn newTurn(@RequestBody Turn newTurn) {
-        return turnRepository.save(newTurn);
+
+        try{
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = principal instanceof UserDetails? ((UserDetails)principal).getUsername():principal.toString();
+            User user = userRepository.findByDni(username);
+            if(user.isBloqued()){
+                throw new UserBloquedException();
+            }
+
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            String dateString = dateFormat.format(date);
+            String timeString = timeFormat.format(date);
+
+            int count = userRepository.countDidNotAttendByDni(username,dateString,timeString);
+            if(count >= 3){
+                user.setBloqued(true);
+                user.setDateBloqued(new java.sql.Date(date.getTime()));
+                userRepository.save(user);
+                throw new UserBloquedException();
+            }
+
+            return turnRepository.save(newTurn);
+        }catch (Exception e){
+            throw e;
+        }
+
     }
 
 

@@ -1,8 +1,8 @@
 package com.guilder.hospital.exceptions;
 
-public class RegistedUserException extends RuntimeException{
+public class RegisteredUserException extends RuntimeException{
 
-    public RegistedUserException(){
+    public RegisteredUserException(){
         super("El dni ingresado ya se encuentra registrado.");
     }
 }

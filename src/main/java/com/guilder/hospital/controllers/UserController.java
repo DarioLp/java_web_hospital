@@ -1,7 +1,7 @@
 package com.guilder.hospital.controllers;
 
 import com.guilder.hospital.exceptions.InvalidCredentialsException;
-import com.guilder.hospital.exceptions.RegistedUserException;
+import com.guilder.hospital.exceptions.RegisteredUserException;
 import com.guilder.hospital.exceptions.UserNotFoundException;
 import com.guilder.hospital.models.Role;
 import com.guilder.hospital.models.User;
@@ -13,10 +13,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,7 +108,7 @@ public class UserController {
         try {
 
             if(userRepository.countByDni(username) != 0){
-                throw new RegistedUserException();
+                throw new RegisteredUserException();
             }
             User user = new User();
             user.setUsername(username);
@@ -125,6 +128,22 @@ public class UserController {
     }
 
 
+    @PostMapping("api/v1/test")
+    public int test(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal instanceof UserDetails? ((UserDetails)principal).getUsername():principal.toString();
+        User user = userRepository.findByDni(username);
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String dateString = dateFormat.format(date);
+        String timeString = timeFormat.format(date);
+
+        int count = userRepository.countDidNotAttendByDni(username,dateString,timeString);
+        return count;
+    }
+
 
 
 
@@ -142,7 +161,7 @@ public class UserController {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                .setExpiration(new Date(System.currentTimeMillis() + 600000000))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
 
