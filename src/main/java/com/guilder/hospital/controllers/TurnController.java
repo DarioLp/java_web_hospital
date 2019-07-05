@@ -4,7 +4,9 @@ import com.guilder.hospital.exceptions.TurnNotFoundException;
 import com.guilder.hospital.models.Doctor;
 import com.guilder.hospital.models.Schedule;
 import com.guilder.hospital.models.Turn;
+import com.guilder.hospital.repositories.DoctorRepository;
 import com.guilder.hospital.repositories.TurnRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
@@ -22,6 +24,9 @@ public class TurnController {
     private final int duracion = 15;
     private final TurnRepository turnRepository;
 
+    @Autowired
+    private DoctorRepository doctorRepository;
+
     public TurnController(TurnRepository turnRepository){
         this.turnRepository = turnRepository;
     }
@@ -34,9 +39,12 @@ public class TurnController {
         return turns;
     }
 
-    /*
+/*
     @GetMapping ("/api/v1/turns_available_specialty")
-    List <Turn> availableTurnsBySpecialty(@RequestParam long idSpecialty , @RequestParam Date date){
+    List <Turn> availableTurnsBySpecialty(@RequestParam long idSpecialty , @RequestParam String dia) throws ParseException {
+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date date = format.parse(dia);
 
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -59,25 +67,27 @@ public class TurnController {
             auxList.add(t);
         }
 
-        List<Schedule> shedules= (ocupados.get(0)).getDoctor().getSchedules();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == 1) dayOfWeek =8; //Si es domingo
-        dayOfWeek --;
 
-        Schedule s = new Schedule();
-        for ( Schedule aux : shedules){
-            if(aux.getDay().getId()== dayOfWeek){
-                s = aux;
-                break;
-            }
-        }
-
-        if (s.getHour_since() ==null) return null; // si no se encontro un shedule para ese dia
-        Date time = this.addGMT(s.getHour_since());
         int i =0;
         for ( List<Turn> docs : turnsByDoctor){
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek == 1) dayOfWeek =8; //Si es domingo
+            dayOfWeek --;
+
+            List<Schedule> shedules= (docs.get(i)).getDoctor().getSchedules();
+            Schedule s = new Schedule();
+            for ( Schedule sche : shedules){
+                if(sche.getDay().getId()== dayOfWeek){
+                    s = sche;
+                    break;
+                }
+            }
+
+            if (s.getHour_since() == null) break; // si no se encontro un shedule para ese dia
+            Date time = this.addGMT(s.getHour_since());
 
             for ( Turn t  : docs){
                 while ( time.compareTo(t.getHour()) < 0){
@@ -108,8 +118,6 @@ public class TurnController {
 
         }
 
-
-
         return disponibles;
 
     }
@@ -125,10 +133,17 @@ public class TurnController {
         String stDate = simpleDateFormat.format(date);
 
         List <Turn> ocupados = turnRepository.findTurnsReservedWithDoctor(idDoctor, stDate);
-        if (ocupados == null) return null;
-        if (ocupados.isEmpty()) return null;
         List <Turn> disponibles = new ArrayList<Turn>();
-        List<Schedule> shedules= (ocupados.get(0)).getDoctor().getSchedules();
+
+        Doctor doctor;
+        if (ocupados.isEmpty()){
+            doctor = doctorRepository.findById(idDoctor).get();
+            if (doctor == null) return null;
+        }
+        else{
+            doctor = ocupados.get(0).getDoctor();
+        }
+        List<Schedule> shedules= doctor.getSchedules();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
