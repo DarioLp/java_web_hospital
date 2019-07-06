@@ -1,9 +1,6 @@
 package com.guilder.hospital.controllers;
 
-import com.guilder.hospital.exceptions.InvalidTurnDateException;
-import com.guilder.hospital.exceptions.TurnNotFoundException;
-import com.guilder.hospital.exceptions.UserBloquedException;
-import com.guilder.hospital.exceptions.UserNotFoundException;
+import com.guilder.hospital.exceptions.*;
 import com.guilder.hospital.models.Doctor;
 import com.guilder.hospital.models.Schedule;
 import com.guilder.hospital.models.Turn;
@@ -215,6 +212,10 @@ public class TurnController {
             User user = userRepository.findByDni(username);
             if(user == null){
                 throw new UserNotFoundException(username);
+            }
+            if(!user.getId().equals(newTurn.getUser().getId())){
+                /*Trata de generar un turno para otro usuario*/
+                throw new UnauthorizedException();
             }
             if(user.isBloqued()){
                 throw new UserBloquedException();
