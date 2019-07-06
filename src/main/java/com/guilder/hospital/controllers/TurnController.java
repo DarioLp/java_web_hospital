@@ -42,9 +42,15 @@ public class TurnController {
 
 
     @GetMapping ("/api/v1/turns")
-    List <Turn> all(){
-        List<Turn> turns = turnRepository.findAll();
-        System.out.println(turns);
+    List <Turn> all(@RequestParam Long idUser){
+        List<Turn> turns;
+        if(idUser == null){
+             turns = turnRepository.findAll();
+        }
+        else{
+            turns = turnRepository.findByUser(idUser);
+        }
+
         return turns;
     }
 
