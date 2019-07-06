@@ -1,11 +1,11 @@
 spring:
   datasource:
-    #url: jdbc:mysql://localhost:3306/hospital?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-    #username: hospital
-    #password: java2019
-      url: jdbc:mysql://remotemysql.com:3306/fOgYmg0qgj
-      username: fOgYmg0qgj
-      password: Ra6q7jZAlg
+    url: jdbc:mysql://localhost:3306/hospital?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: hospital
+    password: java2019
+#      url: jdbc:mysql://remotemysql.com:3306/fOgYmg0qgj
+#      username: fOgYmg0qgj
+#      password: Ra6q7jZAlg
       #url: jdbc:mysql://remotemysql.com:3306/lk9J0gpKAF
       #username: lk9J0gpKAF
       #password: 97Lwdswzic
