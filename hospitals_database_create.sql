@@ -8,7 +8,7 @@ create table doctor (id bigint not null auto_increment, enrollment varchar(255) 
 create table role (id bigint not null auto_increment, role varchar(255) not null, primary key (id)) engine=InnoDB;
 create table schedule (id bigint not null auto_increment, hour_since time not null, hour_to time not null, day_id bigint not null, doctor_id bigint not null, primary key (id)) engine=InnoDB;
 create table specialty (id bigint not null auto_increment, description varchar(255), name varchar(255) not null, primary key (id)) engine=InnoDB;
-create table turn (id bigint not null auto_increment, attended bit not null, date datetime not null, hour time not null, doctor_id bigint not null, user_id bigint not null, primary key (id)) engine=InnoDB;
+create table turn (id bigint not null auto_increment, attended bit not null, date date not null, hour time not null, doctor_id bigint not null, user_id bigint not null, primary key (id)) engine=InnoDB;
 create table user (id bigint not null auto_increment, address varchar(255), cuil varchar(255), date_bloqued date, dni varchar(255) not null, fist_name varchar(255) not null, is_bloqued bit not null, last_name varchar(255) not null, password varchar(255) not null, role_id bigint not null, primary key (id)) engine=InnoDB;
 alter table user add constraint UK_jq0ta6mef3p0o47ysw6sflcdl unique (dni);
 alter table diagnostic add constraint FKq2s0e15hv5aaufa9tmg5of6lp foreign key (turn_id) references turn (id);

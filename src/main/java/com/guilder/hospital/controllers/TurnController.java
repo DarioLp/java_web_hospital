@@ -2,6 +2,7 @@ package com.guilder.hospital.controllers;
 
 import com.guilder.hospital.exceptions.TurnNotFoundException;
 import com.guilder.hospital.exceptions.UserBloquedException;
+import com.guilder.hospital.exceptions.UserNotFoundException;
 import com.guilder.hospital.models.Doctor;
 import com.guilder.hospital.models.Schedule;
 import com.guilder.hospital.models.Turn;
@@ -172,7 +173,7 @@ public class TurnController {
             while ( time.compareTo(t.getHour()) < 0){
                 Turn newTurn = new Turn();
                 newTurn.setDoctor(s.getDoctor());
-                newTurn.setDate(date);
+                newTurn.setDate(new java.sql.Date(date.getTime()));
                 newTurn.setAttended(false);
                 newTurn.setHour(new Time(time.getTime()));
                 disponibles.add(newTurn);
@@ -186,7 +187,7 @@ public class TurnController {
         while (time.compareTo(timeFin)<0){
             Turn newTurn = new Turn();
             newTurn.setDoctor(s.getDoctor());
-            newTurn.setDate(date);
+            newTurn.setDate(new java.sql.Date(date.getTime()));
             newTurn.setAttended(false);
             newTurn.setHour(new Time(time.getTime()));
             disponibles.add(newTurn);
@@ -205,6 +206,9 @@ public class TurnController {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = principal instanceof UserDetails? ((UserDetails)principal).getUsername():principal.toString();
             User user = userRepository.findByDni(username);
+            if(user == null){
+                throw new UserNotFoundException(username);
+            }
             if(user.isBloqued()){
                 throw new UserBloquedException();
             }
