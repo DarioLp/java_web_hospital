@@ -1,5 +1,6 @@
 package com.guilder.hospital.controllers;
 
+import com.guilder.hospital.exceptions.InvalidTurnDateException;
 import com.guilder.hospital.exceptions.TurnNotFoundException;
 import com.guilder.hospital.exceptions.UserBloquedException;
 import com.guilder.hospital.exceptions.UserNotFoundException;
@@ -233,6 +234,13 @@ public class TurnController {
                 throw new UserBloquedException();
             }
 
+            Date now = new Date();
+            Date date_turn = this.addGMT(newTurn.getDate());
+
+            if(now.compareTo(date_turn) > 0){
+                throw new InvalidTurnDateException();
+            }
+            newTurn.setDate(new java.sql.Date(date_turn.getTime()));
             return turnRepository.save(newTurn);
         }catch (Exception e){
             throw e;
